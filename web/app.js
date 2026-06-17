@@ -1,5 +1,5 @@
 // BabyWhy Chat Application
-const API_ENDPOINT = 'https://endpoint-ac02c91a-691a-4f9d-b982-7b00bd9097d3.agentbase-runtime.aiplatform.vngcloud.vn';
+const API_ENDPOINT = 'https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn';
 
 // DOM Elements
 const messagesDiv = document.getElementById('messages');
