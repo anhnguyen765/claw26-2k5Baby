@@ -76,15 +76,23 @@ async function handleSendMessage() {
     const loadingId = addLoadingMessage();
 
     try {
+        console.log('📡 Calling API:', `${API_ENDPOINT}/decide`);
         const response = await fetch(`${API_ENDPOINT}/decide`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ challenge })
         });
 
-        if (!response.ok) throw new Error('Failed to get analysis');
+        console.log('📍 API Response Status:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ API Error:', errorText);
+            throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
 
         const data = await response.json();
+        console.log('✅ Analysis received:', data);
         lastAnalysis = data;
 
         // Remove loading message
@@ -100,9 +108,11 @@ async function handleSendMessage() {
         renderHistory();
 
     } catch (error) {
+        console.error('🚨 Fetch Error:', error);
+        console.error('API Endpoint:', API_ENDPOINT);
         document.getElementById(loadingId)?.remove();
-        addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
-        showToast('Error: ' + error.message, true);
+        addMessage(`Sorry, I encountered an error: ${error.message}. Check console (F12) for details.`, 'assistant');
+        showToast('❌ ' + error.message, true);
     } finally {
         sendBtn.disabled = false;
         challengeInput.focus();
