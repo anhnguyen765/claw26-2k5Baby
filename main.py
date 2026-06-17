@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from langchain_openai import ChatOpenAI
 
@@ -10,6 +11,9 @@ load_dotenv()
 
 # Initialize Flask app (API only)
 app = Flask(__name__)
+
+# Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"]}}, supports_credentials=True)
 
 # Initialize LLM first
 api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
