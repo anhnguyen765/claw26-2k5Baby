@@ -1,242 +1,154 @@
 # BabyWhy - Decision Clarity Coach
 
-An AI-powered decision clarity coach for Product Owners, Managers, and Leaders. BabyWhy helps you think through complex product decisions using **structured Socratic questioning**, **emotional signal detection**, and **stakeholder analysis**.
+## The Problem
 
-Built as a REST API on **AgentBase Runtime** with **Claude agent integration** via the `.claude/skills/babywhy/` skill.
+You're facing a tough decision. Engineering wants to tackle technical debt. Sales wants new features. The board is pushing for growth. Your instinct says one thing; the data suggests another.
 
-## 🎯 Core Philosophy
+You're stuck because:
+- You have conflicting input from stakeholders
+- You can't tell if you're deciding from fear, hope, or clarity
+- There's no structure—just internal back-and-forth that drains energy
 
-- **Clarity over Comfort** — challenges assumptions over validation
-- **Questions before Advice** — explores context before recommending
-- **Product-Centric** — reconnects to user value and business outcomes
-- **Human Agency** — improves your decision-making, doesn't decide for you
+What you need is someone to ask you the right questions, not tell you what to do.
 
-## ⚡ Quick Start
+## What BabyWhy Does
 
-### Test the API
+BabyWhy is an **AI decision coach** that uses Socratic questioning to help you think through complex product and leadership decisions. Instead of advice, it offers:
+
+- **Clarity on what's really at stake** — emotional signals that reveal hidden assumptions
+- **Better questions** — structured questioning that challenges your thinking  
+- **Stakeholder mapping** — understanding who wants what and why
+- **A decision journal** — track your thinking over time to spot patterns
+
+It's built for Product Owners, Managers, and Leaders who make decisions that matter.
+
+## How to Use It
+
+### Option 1: Web API (Fastest)
+
+Post your decision challenge to the live API:
 
 ```bash
-# Health check
-curl https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn/health
-
-# Analyze a decision
 curl -X POST https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn/decide \
   -H "Content-Type: application/json" \
   -d '{
     "challenge": "Should we prioritize technical debt or new features?",
-    "context": "Engineering wants cleanup, sales wants features"
+    "context": "Engineering wants cleanup, sales wants new features"
   }'
 ```
 
-### Run Test Suite
+You'll get back:
+- Emotional signals (uncertainty, frustration, clarity)
+- Probing questions to sharpen your thinking
+- Next steps for reflection
 
-```bash
-python3 test_babywhy_agent.py
+### Option 2: Claude Code (Natural Language)
+
+If you use Claude Code, just ask naturally:
+
+```
+/babywhy "Help me think through prioritizing technical debt vs new features. Engineering wants cleanup but sales is pushing for features."
 ```
 
-Tests health check, decision analysis, decision saving, and Claude agent simulation.
+Claude will call the API and give you the analysis, plus help you reflect on the questions.
 
-### Local Development
+### Option 3: Run Locally
+
+For development or private deployment:
 
 ```bash
-# Create virtual environment
+# Setup
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 
-# Create .env file
-cp .env.example .env  # Edit with your LLM API credentials
+# Create .env with your LLM API credentials
+# (template in .env)
 
-# Run locally
+# Run
 python main.py
 # API runs at http://localhost:8080
 ```
 
-## 🚀 Deployment
+## Core Principles
 
-Already deployed on **AgentBase Runtime**:
+- **Clarity over Comfort** — BabyWhy challenges assumptions, not validates them
+- **Questions before Advice** — Explores context before recommending
+- **Product-Centric** — Reconnects decisions to user value and business outcomes
+- **Human Agency** — Improves your decision-making; doesn't decide for you
+
+## API Endpoints
+
+**Health Check**
+```bash
+GET /health
+```
+
+**Analyze a Decision**
+```bash
+POST /decide
+{
+  "challenge": "Your decision challenge",
+  "context": "Optional context (stakeholders, constraints, etc.)"
+}
+```
+
+**Save to Your Decision Journal**
+```bash
+POST /journal
+{
+  "decision_summary": "What you decided and why"
+}
+```
+
+See the [API responses](README.md#api-endpoints-expanded) for full schema.
+
+## Production Endpoint
+
 ```
 https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn
 ```
 
-To redeploy with changes:
+Test it:
 ```bash
-bash create_new_runtime.sh
+curl https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn/health
 ```
 
-## 📡 API Endpoints
+## Features
 
-### Health Check
-```bash
-GET /health
-```
-Returns: `{"status": "healthy", "agent": "BabyWhy", "version": "1.0-phase1"}`
+- **Emotional Reflection** — Identifies emotional signals in your challenge
+- **Socratic Questions** — Asks clarifying questions to test assumptions
+- **Stakeholder Analysis** — Maps stakeholder incentives and conflicts
+- **Product Vision Anchoring** — Reconnects to strategic outcomes
+- **Decision Journal** — Persist decisions for pattern analysis over time
 
-### Analyze Decision
-```bash
-POST /decide
-Content-Type: application/json
+## Troubleshooting
 
-{
-  "challenge": "Your decision challenge here",
-  "context": "Optional context about stakeholders, constraints, etc."
-}
-```
-
-**Response:**
-```json
-{
-  "challenge": "...",
-  "analysis": {
-    "emotion": {
-      "primary_emotion": "uncertain|frustrated|overwhelmed|...",
-      "intensity": 1-10
-    },
-    "questions": [
-      "What evidence supports this?",
-      "What alternatives exist?",
-      "What's really happening?"
-    ]
-  },
-  "next_steps": [
-    "Reflect on the questions",
-    "Analyze stakeholders",
-    "Reconnect to vision"
-  ]
-}
-```
-
-### Save Decision
-```bash
-POST /journal
-Content-Type: application/json
-
-{
-  "decision_summary": "Your decision summary"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "decision_id": "decision-2026-06-17T...",
-  "message": "Decision saved"
-}
-```
-
-## 🤖 Claude Agent Integration
-
-BabyWhy is available as a Claude skill at `.claude/skills/babywhy/`
-
-### Using with Claude Code
-
-```bash
-/babywhy analyze "Your decision challenge"
-/babywhy save "Your decision summary"
-/babywhy health
-```
-
-Or ask Claude naturally:
-> "Help me think through a decision about prioritizing technical debt versus new features. Engineering wants cleanup but sales is pushing for features."
-
-Claude will:
-1. Call the BabyWhy API to analyze your decision
-2. Report emotional signals and Socratic questions
-3. Suggest next reflection steps
-4. Optionally save the analysis to the journal
-
-## 🧪 Features
-
-- **Emotional Reflection** — Detects emotional states in challenges
-- **Socratic Questioning** — Asks clarifying questions to challenge assumptions
-- **Stakeholder Analysis** — Maps stakeholder conflicts and incentives
-- **Product Vision Anchoring** — Reconnects decisions to strategic outcomes
-- **Decision Journal** — Persists decisions for future pattern analysis
-
-## 📁 Project Structure
-
-```
-├── main.py                 # Flask API server
-├── requirements.txt        # Python dependencies
-├── Dockerfile             # Docker container definition
-├── .env.example           # Environment variables template
-├── ONBOARDING.md          # User guide
-├── DEPLOYMENT_GUIDE.md    # Deployment strategies
-├── test_babywhy_agent.py  # Test suite
-├── .claude/
-│   └── skills/
-│       └── babywhy/       # Claude skill integration
-│           ├── SKILL.md   # Skill documentation
-│           └── babywhy_tools.py  # Tool implementations
-└── .claude/skills/agentbase/  # AgentBase platform tools
-```
-
-## 🔧 Configuration
-
-See `.env` for environment variables:
-- `LLM_API_KEY` — API key for your LLM provider (required)
-- `LLM_BASE_URL` — LLM API endpoint (default: GreenNode MaaS)
-- `LLM_MODEL` — Model name (default: gpt-5.0-nano)
-
-## 🚨 CORS Support
-
-The API includes CORS headers to allow calls from:
-- Claude Code
-- Web applications
-- Other HTTP clients
-
-All origins are allowed: `Access-Control-Allow-Origin: *`
-
-## 📚 Documentation
-
-- **ONBOARDING.md** — End-user guide for decision analysis
-- **DEPLOYMENT_GUIDE.md** — Multiple deployment options
-- **SKILL.md** — Claude skill documentation and examples
-- **test_babywhy_agent.py** — Test suite and Claude agent examples
-
-## 🐛 Troubleshooting
-
-### API not responding
+### API not responding?
 ```bash
 curl https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn/health
 ```
 
 Should return `{"status": "healthy", ...}`
 
-### CORS errors
-The API supports CORS for all origins. If you get CORS errors, ensure:
-1. API endpoint is correct in your client
-2. Request uses `Content-Type: application/json`
-3. API is actually running and responding
+### Getting CORS errors?
+The API allows all origins. Check:
+1. Your endpoint URL is correct
+2. Request is `POST` with `Content-Type: application/json`
+3. API is actually running
 
-### LLM errors
-Check your LLM API credentials in `.env`:
-```bash
-# Test LLM connectivity
-curl -X POST $LLM_BASE_URL/chat/completions \
-  -H "Authorization: Bearer $LLM_API_KEY" \
-  -d '{"model":"$LLM_MODEL","messages":[{"role":"user","content":"test"}]}'
-```
+### LLM connection issues?
+Check `.env` has your valid LLM API credentials.
 
-## 📊 Status
+## Get Started Now
 
-- ✅ API fully functional with CORS support
-- ✅ Tested with Claude agent integration
-- ✅ Deployed on AgentBase Runtime
-- ✅ Decision journaling working
-- ✅ Emotional analysis and Socratic questions enabled
-
-## 🔗 Links
-
-- **Production API**: https://endpoint-3f1e948d-3509-4189-902d-5d5a173745fa.agentbase-runtime.aiplatform.vngcloud.vn
-- **GitHub Repo**: https://github.com/anhnguyen765/claw26-2k5Baby
-- **AgentBase Console**: https://aiplatform.console.vngcloud.vn/agent-runtime
+1. **Try it immediately**: Copy-paste the curl command above
+2. **Integrate it**: Use the `/babywhy` Claude skill or HTTP endpoint
+3. **Run locally**: Follow the local setup section
 
 ---
 
-**Version**: 1.0-phase1  
-**Status**: Production  
-**Last Updated**: 2026-06-17
+**Status**: Production Ready  
+**Built with**: Python, Flask, Claude AI  
+**Deployed on**: AgentBase Runtime  
+**Last Updated**: June 2026
