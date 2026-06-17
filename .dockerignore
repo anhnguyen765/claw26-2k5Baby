@@ -1,0 +1,17 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+.git
+.gitignore
+.dockerignore
+docker-compose.yml
+.env.local
+.agentbase-state.json
+.claude/
+.agentbase/
+.env
